@@ -10,7 +10,7 @@ namespace AzureSQLTest
     {
         private static List<MuseumObject> musuemObjects = new List<MuseumObject>();
 
-        public static async Task<List<MuseumObject>> GetMuseumObjectsClientSecret()
+        public static async Task GetMuseumObjectsClientSecret()
         {
             var appID = Environment.GetEnvironmentVariable("APP_ID");
             var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET");
@@ -27,11 +27,10 @@ namespace AzureSQLTest
 
             };
 
-            return musuemObjects;
         }
 
 
-        public static async Task<List<MuseumObject>> GetMuseumObjectsCertificate()
+        public static async Task GetMuseumObjectsCertificate()
         {
 
             var tenantId = Environment.GetEnvironmentVariable("TENANT_ID");
@@ -50,7 +49,7 @@ namespace AzureSQLTest
             IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(clientId)
                 .WithCertificate(certificate)
                 .WithAuthority(new Uri(authority))
-            .Build();
+                .Build();
 
             AuthenticationResult result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
@@ -63,8 +62,6 @@ namespace AzureSQLTest
                 await MuseumItemsDatabaseCall(connection, "SELECT * FROM [dbo].[DailyMuseumItems] Order by Id OFFSET 10 ROW FETCH NEXT 10 ROWS ONLY;");
 
             }
-
-            return musuemObjects;
 
         }
 
